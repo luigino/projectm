@@ -1,0 +1,6 @@
+option('emscripten', type: 'boolean', value: 'false', description: 'Build for web with emscripten')
+option('gles', type: 'boolean', value: 'false', description: 'OpenGL ES support')
+option('jack', type: 'boolean', value: 'false', description: 'Build Jack')
+option('qt', type: 'boolean', value: 'false', description: 'Build Qt')
+option('sdl', type: 'boolean', value: 'false', description: 'Build SDL2 app')
+option('threading', type: 'boolean', value: 'true', description: 'Multithreading')
