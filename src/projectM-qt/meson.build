@@ -34,24 +34,6 @@ libprojectM_qt_sources = [
    'nullable.hpp'
 ]
 
-
-###   'qprojectm_mainwindow.ui',
-###   'qpreseteditordialog.ui',
-###   'qprojectmconfigdialog.ui',
-
-###   'application.qrc',
-###   'images/*'
-###]
-
-###nodist_libprojectM_qt_a_SOURCES = \
-###	application_qrc.cpp \
-###	$(nodist_projectM_qt_moc_sources)
-###
-###CLEANFILES = \
-###	application_qrc.cpp \
-###	${BUILT_SOURCES} \
-###	${nodist_projectM_qt_moc_sources}
-
 qt5 = import('qt5')
 dep_qt5 = dependency('qt5', modules: ['Core', 'Gui', 'Widgets', 'OpenGL'])
 
@@ -84,13 +66,3 @@ libprojectM_qt = static_library(
    link_with: libprojectM,
    pic: true
 )
-
-### See if it's possible to use absolute paths
-
-###AM_CPPFLAGS = \
-###     -include $(top_builddir)/config.h \
-###     -DSYSCONFDIR=\""$(sysconfdir)"\" \
-###     -I${top_srcdir}/src/libprojectM \
-###     -I${top_srcdir}/src/libprojectM/Renderer \
-###     ${QT_CFLAGS} \
-###     -fPIC
