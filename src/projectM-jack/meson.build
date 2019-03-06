@@ -1,5 +1,5 @@
-dep_jack = dependency('libjack', required: true)
-dep_qxt = dependency('qxt', required: false)
+dep_jack = dependency('jack', required: true)
+#dep_qxt = dependency('qxt', required: false)
 
 # TODO: build qprojectM-jack and projectM-jack as separate programs
 
@@ -9,6 +9,7 @@ projectM_jack_sources = [
 ]
 
 # TODO: add remote control if we have qxt network lib
+# it appears to be qt4-only
 #### if QT_NETWORK_ENABLED
 ###if dep_qxt
 ###   projectM_jack_sources += [
@@ -34,6 +35,7 @@ projectM_jack = executable(
    link_with: [
       libprojectM_qt,
       libprojectM
+   ],
    pie: true,
    install: true
 )

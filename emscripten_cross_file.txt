@@ -1,0 +1,22 @@
+[binaries]
+    c = '..\..\..\emsdk\emscripten\1.38.11\emcc'
+    cpp = '..\..\..\emsdk\emscripten\1.38.11\em++'
+    ar = '..\..\..\emsdk\emscripten\1.38.11\emar'
+    #exe_wrapper = 'node'
+
+    [properties]
+    root = '..\..\..\emsdk\emscripten\1.38.11\system'
+    c_args = ['-s', 'WASM=1', '-O2']
+    c_link_args = ['-s', 'WASM=1','-O2']
+    cpp_args = ['-s', 'WASM=1','-O2']
+    cpp_link_args = ['-s', 'WASM=1','-O2']
+    shared_lib_suffix = 'js'
+    static_lib_suffix = 'js'
+    shared_module_suffix = 'js'
+    exe_suffix = 'js'
+
+    [host_machine]
+    system = 'emscripten'
+    cpu_family = 'x86'
+    cpu = 'i686'
+    endian = 'little'

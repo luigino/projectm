@@ -84,7 +84,7 @@ libprojectM = library(
       libRenderer
    ],
    dependencies: [
-      dep_main,
+      dep_platform,
       dep_gl,
       dep_pthread
    ],
