@@ -50,7 +50,6 @@ projectM_pulseaudio = executable(
    install: true
 )
 
-
 install_data('projectM-pulseaudio.desktop', install_dir: join_paths(get_option('datadir'), 'applications'))
 install_data('../projectM-qt/images/icons/prjm16-transparent.svg', install_dir: join_paths(get_option('datadir'), 'pixmaps'))
 install_man('projectM-pulseaudio.1')

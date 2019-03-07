@@ -29,7 +29,8 @@
 #ifndef _EXPR_H
 #define _EXPR_H
 
-#include "config.h"
+// will have to see about this
+//#include "config.h"
 #include "dlldefs.h"
 #include "CValue.hpp"
 #include "Func.hpp"

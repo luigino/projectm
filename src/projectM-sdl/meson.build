@@ -27,3 +27,8 @@ projectM_sdl = executable(
    dependencies: [dep_gl, dep_sdl],
    link_with: libprojectM
 )
+
+if host_os.startswith('darwin')
+   install_data('../../Resources/projectM.icns', install_dir : 'Contents/Resources')
+   install_data('../../Resources/Info.plist', install_dir : 'Contents')
+endif

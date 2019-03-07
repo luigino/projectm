@@ -1,0 +1,6 @@
+- remove references to config.h
+- add -name application wrt rcc both in Makefile.am and add _application to
+  the function call somewhere
+
+otherstuff:
+- maybe put meson-specific files into Resources

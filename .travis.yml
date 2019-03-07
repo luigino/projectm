@@ -1,5 +1,3 @@
-sudo: false
-
 os:
   - osx
 
@@ -11,8 +9,12 @@ services:
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2 glm ninja python3; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2 glm ninja; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install meson; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then SDKROOT=$(xcodebuild -version -sdk macosx Path) meson builddir && ninja -C builddir test; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then SDKROOT=$(xcodebuild -version -sdk macosx Path) meson --prefix=/tmp/myapp.app --bindir=Contents/MacOS builddir -Dsdl=true && ninja -C builddir && ninja install -v -C builddir; fi
+
+notifications:
+  email: false
+

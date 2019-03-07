@@ -1,4 +1,4 @@
-project('projectM', ['c', 'cpp'], default_options : ['cpp_std=c++11'], version: '3.1.1-rc2', license: 'LGPLv2.1+')
+project('projectM', ['c', 'cpp'], default_options : ['cpp_std=c++11'], version: '3.1.1-rc3', license: 'LGPLv2.1+')
 
 cc = meson.get_compiler('c')
 cxx = meson.get_compiler('cpp')
@@ -26,20 +26,13 @@ host_os = host_machine.system()
 enable_emscripten = get_option('emscripten')
 enable_gles = get_option('gles')
 enable_jack = get_option('jack')
+enable_llvm = get_option('llvm')
 enable_qt = get_option('qt')
 enable_sdl = get_option('sdl')
 enable_threading = get_option('threading')
 
-if cxx.has_function('aligned_alloc', prefix: '#include <stdlib.h>')
-   have_aligned_alloc = true
-else
-   error('stdlib does not support aligned_alloc')
-endif
-if cxx.has_function('posix_memalign', prefix: '#include <stdlib.h>')
-   set_variable('have_posix_memalign', true)
-else
-   error('stdlib does not support posix_memalign')
-endif
+have_aligned_alloc = cxx.has_function('aligned_alloc', prefix: '#include <stdlib.h>')
+have_posix_memalign = cxx.has_function('posix_memalign', prefix: '#include <stdlib.h>')
 
 # dep_platform is not going to be available on Windows, see what to do
 if host_os.startswith('linux')
@@ -53,9 +46,9 @@ if host_os.startswith('darwin')
    dep_platform = dependency('appleframeworks', modules : ['CoreFoundation'], required : true)
 endif
 
-### I think I could use a
-# dep_main_gl
-### dependency object to add dep_gl, dep_opengl and dep_gles when present
+if enable_llvm
+   dep_llvm = dependency('llvm', required: true)
+endif
 
 if enable_emscripten
 ### check how they're used later
@@ -87,11 +80,17 @@ endif
 ###   endif
 ###endif
 
+###if not enable_emscripten
+###   if not cxx.has_header('glm/glm.hpp')
+###      error('glm headers are required.')
+###   endif
+###endif
+
+# this might be excessive, we only need the glm/glm.hpp header
 if not enable_emscripten
-   if not cxx.has_header('glm/glm.hpp')
-      error('glm headers are required.')
-   endif
+   dependency('glm', required: true)
 endif
+
 
 # create config.h
 config_h = configuration_data()
@@ -172,14 +171,17 @@ message(
 'includedir:             '+join_paths(get_option('prefix'), get_option('includedir'))+'\n\n'+
 'compiler:               '+cxx.get_id()+'\n'+
 'cflags:                 not supported by meson\n'+
+'cxxflags:               not supported by meson\n'+
+'libs:                   not supported by meson\n'+
 'ldflags:                not supported by meson\n\n'+
 '- - -\n\n'+
 'Applications:\n'+
 '=====\n\n'+
 'libprojectM:            yes\n'+
-'Threading:              '+get_variable('enable_threading').to_string('yes', 'no')+'\n'+
-'SDL:                    '+get_variable('enable_sdl').to_string('yes', 'no')+'\n'+
+'Threading:              '+enable_threading.to_string('yes', 'no')+'\n'+
+'SDL:                    '+enable_sdl.to_string('yes', 'no')+'\n'+
 'Qt & Pulseaudio:        '+enable_qt.to_string('yes', 'no')+'\n'+
-'OpenGLES:               '+get_variable('enable_gles').to_string('yes', 'no')+'\n'+
-'Emscripten:             '+enable_emscripten.to_string('yes', 'no')+'\n'
+'OpenGLES:               '+enable_gles.to_string('yes', 'no')+'\n'+
+'Emscripten:             '+enable_emscripten.to_string('yes', 'no')+'\n'+
+'llvm:                   '+enable_llvm.to_string('yes', 'no')+'\n'+
 )
