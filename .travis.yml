@@ -18,3 +18,8 @@ script:
 notifications:
   email: false
 
+# whitelist
+branches:
+  only:
+    - meson
+
