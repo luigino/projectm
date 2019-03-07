@@ -1,81 +1,18 @@
-language: cpp
+sudo: false
 
-before_script: ./autogen.sh
+os:
+  - osx
+
+language:
+  - cpp
+
+services:
+  - docker
+
 before_install:
-  - eval "${MATRIX_EVAL}"
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install sdl2 glm ninja python3; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then pip3 install meson; fi
 
-# TODO: test different combinations of flags, --enable-sdl, --enable-qt, etc
 script:
-  - ./configure $PM_OPTS --prefix=$PWD/local && make -j6 && make install  # build from checkout
-  - make dist && tar -zxf projectM-*.tar.gz && cd projectM-* && ./configure $PM_OPTS --prefix=$PWD/dist_install && make -j6 && make install  # build from dist
-  - echo "PWD=$PWD"
-  - ls .
-  # - test -e src/projectM-sdl/projectMSDL
-  - test -e src/libprojectM/libprojectM.la
-  - test -e dist_install/share/projectM/fonts/Vera.ttf
-  - test -d dist_install/share/projectM/presets
-  - test -e dist_install/lib/libprojectM.la
-  - test -e dist_install/include/libprojectM/projectM.hpp
-  - test -e dist_install/include/libprojectM/Common.hpp
-  - test -e dist_install/include/libprojectM/PCM.hpp
-  - dist_install/bin/projectM-unittest
-
-# test on GCC and Clang
-matrix:
-  include:
-    # linux/clang with SDL
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-5.0
-          packages:
-            - clang-5.0
-            - libsdl2-dev
-            - libglm-dev
-            - libc++-dev
-      env:
-        - MATRIX_EVAL="CC=clang-5.0 CXX=clang++-5.0 PM_OPTS=\"--enable-sdl\""
-    # linux/clang with pulseaudio/qt/jack
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-5.0
-          packages:
-            - libsdl2-dev
-            - clang-5.0
-            - libglm-dev
-            - libc++-dev
-            - qt5-default
-            - qtdeclarative5-dev
-            - libqt5opengl5-dev
-            - libjack-dev
-            - libpulse-dev
-            - libsdl-dev  # for jack
-      env:
-        - MATRIX_EVAL="CC=clang-5.0 CXX=clang++-5.0 PM_OPTS=\"--enable-qt --enable-jack --enable-pulseaudio\""
-     # linux/gcc
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-            - libsdl2-dev
-            - libglm-dev
-            - libc++-dev
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-
-    # osx/xcode/clang
-    - os: osx
-      osx_image: xcode8
-      env:
-        - MATRIX_EVAL="brew update && brew install sdl2 glm"
-
-notifications:
-  email:
-    on_success: never
-    on_failure: change
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then SDKROOT=$(xcodebuild -version -sdk macosx Path) meson builddir && ninja -C builddir test; fi
