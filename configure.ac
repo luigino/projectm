@@ -1,4 +1,4 @@
-AC_INIT([projectM], [3.1.1-rc2], [mischa@mvstg.biz], [projectM], [https://github.com/projectM-visualizer/projectm/])
+AC_INIT([projectM], [3.1.1-rc3], [mischa@mvstg.biz], [projectM], [https://github.com/projectM-visualizer/projectm/])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects tar-pax])
 
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
@@ -129,6 +129,19 @@ AC_ARG_ENABLE([gles],
     AC_DEFINE([USE_GLES], [1], [Define USE_GLES])
 ])
 
+dnl LLVM
+dnl unfortuately AX_LLVM macro seems to be out of date, so we're going to rely on the user to make sure LLVM is installed correctly
+AC_ARG_ENABLE([llvm],
+  AS_HELP_STRING([--enable-llvm],[Support for JIT using LLVM]),
+  [], [enable_llvm=no])
+AS_IF([test x"$enable_llvm" = "xyes"], [
+    AC_DEFINE([HAVE_LLVM], [1], [Define HAVE_LLVM])
+    CFLAGS="$CFLAGS -I$(llvm-config --includedir)"
+    CXXFLAGS="$CXXFLAGS -I$(llvm-config --includedir)"
+    LIBS="$LIBS $(llvm-config --libs)"
+    LDFLAGS="$LDFLAGS $(llvm-config --ldflags)"
+])
+
 dnl from https://stackoverflow.com/questions/30897170/ac-subst-does-not-expand-variable answer: https://stackoverflow.com/a/30960268
 dnl ptomato https://stackoverflow.com/users/172999/ptomato
 AC_SUBST([PACKAGE])
@@ -139,17 +152,21 @@ AC_PREFIX_DEFAULT([/usr/local])
 
 AC_PROG_MKDIR_P
 
-AX_CHECK_COMPILE_FLAG([-stdlib=libc++], [
+AS_IF([grep android <<< ${host}], [],
+  [AX_CHECK_COMPILE_FLAG([-stdlib=libc++], [
                         CXXFLAGS="$CXXFLAGS -stdlib=libc++"])
+])
 
 AX_CHECK_COMPILE_FLAG([-std=c++11], [
                         CXXFLAGS="$CXXFLAGS -std=c++11"])
 
 # Qt5
-AX_HAVE_QT  # m4/qt.m4
 AC_ARG_ENABLE([qt], AS_HELP_STRING([--enable-qt], [Enable Qt: needed for pulseaudio and jack GUIs]), [], [enable_qt=check])
 AS_IF([test "$enable_qt" != "no"],
-  [AS_IF([test "$have_qt" = "yes"], [
+  [
+    AX_HAVE_QT  # m4/qt.m4
+
+    AS_IF([test "$have_qt" = "yes"], [
         # we have at least qt5 if $have_qt is true
         enable_qt=yes
         export QT_SELECT=qt5
@@ -220,6 +237,8 @@ includedir:             ${includedir}
 
 compiler:               ${CC}
 cflags:                 ${CFLAGS} ${my_CFLAGS}
+cxxflags:               ${CXXFLAGS}
+libs:                   ${LIBS}
 ldflags:                ${LDFLAGS}
 
 - - -
@@ -235,4 +254,5 @@ Pulseaudio:             ${enable_pulseaudio}
 Jack:                   ${enable_jack}
 OpenGLES:               ${enable_gles}
 Emscripten:             ${enable_emscripten}
+llvm:                   ${enable_llvm}
 ])

@@ -76,8 +76,6 @@ projectM::~projectM()
     worker_sync.finish_up();
     printf("e");
     pthread_join(thread, &status);
-    printf("a");
-    pthread_detach(thread);
     printf("n");
     #ifdef SYNC_PRESET_SWITCHES
     pthread_mutex_destroy( &preset_mutex );
@@ -395,14 +393,10 @@ void projectM::renderFrame()
 
         renderer->RenderFrame(pipeline, pipelineContext());
 
+        // mergePipelines() sets masterAlpha for each RenderItem, reset it before we forget
+        for (RenderItem *drawable : pipeline.drawables)
+            drawable->masterAlpha = 1.0;
         pipeline.drawables.clear();
-
-        /*
-        while (!pipeline.drawables.empty()) {
-        delete(pipeline.drawables.back());
-        pipeline.drawables.pop_back();
-        } */
-
     }
     else
     {
