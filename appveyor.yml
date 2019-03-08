@@ -25,7 +25,7 @@ install:
 
   # Obtain pkg-config
   - appveyor DownloadFile "http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.26-1_win32.zip" -FileName "C:\pkg-config_win32.zip"
-  - 7z x -y "C:\pkg-config_win32.zip" -o "C:\pkg-config"
+  - 7z x -y "C:\pkg-config_win32.zip" -o"C:\pkg-config"
   - cmd set PKG_CONFIG_PATH=C:\pkg-config\bin
   - cmd echo Using pkg-config at %PKG_CONFIG_PATH%
 
