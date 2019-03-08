@@ -25,8 +25,8 @@ install:
   # Obtain pkg-config
   - appveyor DownloadFile "http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.26-1_win32.zip" -FileName "C:\pkg-config_win32.zip"
   - 7z x -y "C:\pkg-config_win32.zip" -o"C:\pkg-config"
-  - cmd set PKG_CONFIG_PATH=C:\pkg-config\bin
-  - cmd echo Using pkg-config at %PKG_CONFIG_PATH%
+  - cmd: set PKG_CONFIG_PATH=C:\pkg-config\bin
+  - cmd: echo Using pkg-config at %PKG_CONFIG_PATH%
   # Add neccessary paths to PATH variable
   - cmd: set PATH=%cd%;C:\ninja-build;%PYTHON_ROOT%;%PYTHON_ROOT%\Scripts;%PKG_CONFIG_PATH%;%PATH%
   # Install meson
