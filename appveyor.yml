@@ -22,8 +22,16 @@ install:
   - cmd: if %arch%==x86 (set PYTHON_ROOT=C:\python37) else (set PYTHON_ROOT=C:\python37-x64)
   # Print out dependency paths
   - cmd: echo Using Python at %PYTHON_ROOT%
+
+  # Obtain pkg-config
+  - appveyor DownloadFile "http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.26-1_win32.zip" -FileName "C:\pkg-c           $
+  - 7z x -y "C:\pkg-config_win32.zip" -o"C:\pkg-config"
+  - cmd set PKG_CONFIG_PATH=C:\pkg-config
+  - cmd echo Using pkg-config at %PKG_CONFIG_PATH%
+
   # Add neccessary paths to PATH variable
-  - cmd: set PATH=%cd%;C:\ninja-build;%PYTHON_ROOT%;%PYTHON_ROOT%\Scripts;%PATH%
+  - cmd: set PATH=%cd%;C:\ninja-build;%PYTHON_ROOT%;%PYTHON_ROOT%\Scripts;%PKG_CONFIG_PATH%;%PATH%
+
   # Install meson
   - cmd: pip install meson
   # Set up the build environment
