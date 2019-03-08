@@ -183,5 +183,5 @@ message(
 'Qt & Pulseaudio:        '+enable_qt.to_string('yes', 'no')+'\n'+
 'OpenGLES:               '+enable_gles.to_string('yes', 'no')+'\n'+
 'Emscripten:             '+enable_emscripten.to_string('yes', 'no')+'\n'+
-'llvm:                   '+enable_llvm.to_string('yes', 'no')+'\n'+
+'llvm:                   '+enable_llvm.to_string('yes', 'no')+'\n'
 )
