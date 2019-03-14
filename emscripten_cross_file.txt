@@ -1,11 +1,12 @@
 [binaries]
-    c = '..\..\..\emsdk\emscripten\1.38.11\emcc'
-    cpp = '..\..\..\emsdk\emscripten\1.38.11\em++'
-    ar = '..\..\..\emsdk\emscripten\1.38.11\emar'
+    c = '/home/user/emsdk/emscripten/1.38.28/emcc'
+    cpp = '/home/user/emsdk/emscripten/1.38.28/em++'
+    ar = '/home/user/emsdk/emscripten/1.38.28/emar'
     #exe_wrapper = 'node'
+    pkgconfig = '/usr/bin/pkg-config'
 
     [properties]
-    root = '..\..\..\emsdk\emscripten\1.38.11\system'
+    root = '/home/user/emsdk/emscripten/1.38.28/system'
     c_args = ['-s', 'WASM=1', '-O2']
     c_link_args = ['-s', 'WASM=1','-O2']
     cpp_args = ['-s', 'WASM=1','-O2']

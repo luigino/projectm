@@ -34,6 +34,8 @@ enable_threading = get_option('threading')
 have_aligned_alloc = cxx.has_function('aligned_alloc', prefix: '#include <stdlib.h>')
 have_posix_memalign = cxx.has_function('posix_memalign', prefix: '#include <stdlib.h>')
 
+dep_platform = []
+dep_pthread = []
 # dep_platform is not going to be available on Windows, see what to do
 if host_os.startswith('linux')
    dep_platform = cxx.find_library('dl', required: true)
