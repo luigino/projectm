@@ -36,16 +36,15 @@ have_posix_memalign = cxx.has_function('posix_memalign', prefix: '#include <stdl
 
 dep_platform = []
 dep_pthread = []
-# dep_platform is not going to be available on Windows, see what to do
 if host_os.startswith('linux')
-   dep_platform = cxx.find_library('dl', required: true)
+   dep_platform += cxx.find_library('dl', required: true)
    if not cxx.has_function('dlopen', dependencies: dep_platform)
       error('libdl does not support dlopen')
    endif
 endif
 
 if host_os.startswith('darwin')
-   dep_platform = dependency('appleframeworks', modules : ['CoreFoundation'], required : true)
+   dep_platform += dependency('appleframeworks', modules : ['CoreFoundation'], required : true)
 endif
 
 if enable_llvm

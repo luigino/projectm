@@ -7,6 +7,9 @@ endif
 if enable_sdl
    subdir('projectM-sdl')
    subdir('projectM-test')
+   if host_os.startswith('darwin')
+      subdir('projectM-iTunes')
+   endif
 endif
 
 if enable_qt
