@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
+#import <Cocoa/Cocoa.h>
 
 @interface AudioInputDeviceList : NSObject <NSComboBoxDataSource>
 
